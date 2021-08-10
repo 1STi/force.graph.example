@@ -5,6 +5,7 @@ import { nanoid } from 'nanoid';
 const hokageId = nanoid(5);
 
 const hokage = {
+  level: 'hokage',
   id: hokageId,
   name: 'minato',
   force: 150,
@@ -67,16 +68,19 @@ const guenins = [
 
 const jounins = [
   {
+    level: 'jounin',
     name: 'kakashi',
     force: 50,
     team: 7
   },
   {
+    level: 'jounin',
     name: 'asuma',
     force: 40,
     team: 10
   },
   {
+    level: 'jounin',
     name: 'kurenai',
     force: 35,
     team: 8
@@ -93,6 +97,7 @@ jounins.forEach((jounin) => {
     nodeColor: '#000',
     name: jounin.name,
     force: jounin.force,
+    level: jounin.level,
     centralNode: true,
   });
 
@@ -141,7 +146,11 @@ const App = () => {
         minZoom={1}
         maxZoom={5}
         nodeVal={(node) => node.force}
-        nodeColor={(node) => '#93c9ee'}
+        nodeColor={(node) => {
+          if (node.level === 'hokage') return '#505050';
+          if (node.level === 'jounin') return '#507cff';
+          return '#93c9ee';
+        }}
         nodeRelSize={1.75}
       />
     </div>
