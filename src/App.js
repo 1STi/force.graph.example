@@ -152,6 +152,8 @@ const App = () => {
           return '#93c9ee';
         }}
         nodeRelSize={1.75}
+        linkColor={() => '#93c9ee'}
+        linkWidth={2}
       />
     </div>
   );
