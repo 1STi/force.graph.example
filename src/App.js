@@ -1,23 +1,149 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useRef } from 'react';
+import { ForceGraph2D } from 'react-force-graph';
+import { nanoid } from 'nanoid';
 
-function App() {
+const hokageId = nanoid(5);
+
+const hokage = {
+  id: hokageId,
+  name: 'minato',
+  force: 150,
+  centralNode: true,
+};
+
+const nodes = [{
+  ...hokage
+}];
+const links = [];
+
+const guenins = [
+  {
+    name: 'naruto',
+    force: 30,
+    team: 7
+  },
+  {
+    name: 'sasuke',
+    force: 30,
+    team: 7
+  },
+  {
+    name: 'sakura',
+    force: 25,
+    team: 7
+  },
+  {
+    name: 'hinata',
+    force: 20,
+    team: 8
+  },
+  {
+    name: 'kiba',
+    force: 18,
+    team: 8
+  },
+  {
+    name: 'shino',
+    force: 16,
+    team: 8
+  },
+  {
+    name: 'shikamaru',
+    force: 20,
+    team: 10
+  },
+  {
+    name: 'ino',
+    force: 14,
+    team: 10
+  },
+  {
+    name: 'chouji',
+    force: 16,
+    team: 10
+  },
+];
+
+
+const jounins = [
+  {
+    name: 'kakashi',
+    force: 50,
+    team: 7
+  },
+  {
+    name: 'asuma',
+    force: 40,
+    team: 10
+  },
+  {
+    name: 'kurenai',
+    force: 35,
+    team: 8
+  }
+];
+
+jounins.forEach((jounin) => {
+  const jouninId = nanoid(5);
+
+  const team = guenins.filter(guenin => guenin.team === jounin.team);
+
+  nodes.push({
+    id: jouninId,
+    nodeColor: '#000',
+    name: jounin.name,
+    force: jounin.force,
+    centralNode: true,
+  });
+
+  links.push({
+    id: nanoid(5),
+    source: jouninId,
+    target: hokageId
+  });
+
+  team.forEach((guenin) => {
+    const gueninId = nanoid(5);
+
+    nodes.push({
+      id: gueninId,
+      nodeColor: '#000',
+      name: guenin.name,
+      force: guenin.force,
+    });
+
+    links.push({
+      id: nanoid(5),
+      source: gueninId,
+      target: jouninId
+    });
+  });
+});
+
+const data = {
+  nodes: nodes,
+  links: links
+};
+
+
+const App = () => {
+  const graphRef = useRef(null);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ForceGraph2D
+        ref={graphRef}
+        width={window.innerWidth}
+        height={window.innerHeight}
+        graphData={data}
+        dagMode="null"
+        dagLevelDistance={300}
+        minZoom={1}
+        maxZoom={5}
+        nodeVal={(node) => node.force}
+        nodeColor={(node) => '#93c9ee'}
+        nodeRelSize={1.75}
+      />
     </div>
   );
 }
