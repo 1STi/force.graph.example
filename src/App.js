@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { ForceGraph2D } from 'react-force-graph';
 import { nanoid } from 'nanoid';
 
@@ -130,21 +130,95 @@ const data = {
   links: links
 };
 
+const layouts = [
+  {
+    id: 1,
+    label: 'Top/Down',
+    key: 'td'
+  },
+  {
+    id: 2,
+    label: 'Bottom/Up',
+    key: 'bu'
+  },
+  {
+    id: 3,
+    label: 'Left/Right',
+    key: 'lr'
+  },
+  {
+    id: 4,
+    label: 'Right/Left',
+    key: 'rl'
+  },
+  {
+    id: 5,
+    label: 'Near to Far',
+    key: 'zout'
+  },
+  {
+    id: 6,
+    label: 'Far to Near',
+    key: 'zin'
+  },
+  {
+    id: 7,
+    label: 'Radial In',
+    key: 'radialin'
+  },
+  {
+    id: 8,
+    label: 'Radial Out',
+    key: 'radialout'
+  },
+]
+
+const Menu = (props) => (
+  <div
+    style={{
+      position: 'fixed',
+      top: 10,
+      left: 0,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '100vw',
+      zIndex: 3,
+    }}
+  >
+    <select
+      onChange={(ev ) => {
+        props.setLayout(ev.target.value);
+      }}
+      name="layout"
+    >
+      {layouts.map((layout) => (
+        <option
+          key={layout.id}
+          value={layout.key}
+        >
+          {layout.label}
+        </option>
+      ))}
+    </select>
+  </div>
+)
+
 
 const App = () => {
   const graphRef = useRef(null);
+  const [layout, setLayout] = useState('');
 
   return (
     <div className="App">
+      <Menu setLayout={setLayout} />
       <ForceGraph2D
         ref={graphRef}
         width={window.innerWidth}
         height={window.innerHeight}
         graphData={data}
-        dagMode="null"
-        dagLevelDistance={300}
-        minZoom={1}
-        maxZoom={5}
+        dagMode={layout}
+        dagLevelDistance={100}
         nodeVal={(node) => node.force}
         nodeColor={(node) => {
           if (node.level === 'hokage') return '#505050';
